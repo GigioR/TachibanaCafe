@@ -1,0 +1,32 @@
+{
+  "name": "tachibanacafe",
+  "version": "1.0.0",
+  "description": "website for a coffee shop",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GigioR/TachibanaCafe.git"
+  },
+  "keywords": [
+    "coffee",
+    "shop",
+    "nodejs",
+    "javascript",
+    "api",
+    "rest"
+  ],
+  "author": "Giovanni Pimenta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GigioR/TachibanaCafe/issues"
+  },
+  "homepage": "https://github.com/GigioR/TachibanaCafe#readme",
+  "dependencies": {
+    "nodemon": "^2.0.4",
+    "restify": "^8.5.1"
+  }
+}
