@@ -42,7 +42,69 @@ server.get("/products", (req, res, next) => {
     df = JSON.parse(data);
     res.send(df);
   });
+  next();
 });
+
+
+server.post("/productsById", (req, res, next) => {
+  var id = req.body.id
+  console.log(id);
+  fs.readFile(path.join(__dirname, "products.json"), (err, data) => {
+    if (err) {
+      throw err;
+    }
+    df = JSON.parse(data);
+    console.log(df);
+    df.forEach(element => {
+      if(id == element.id) res.send(element);
+    });
+  });
+  next();
+});
+
+server.post("/deleteProd", (req, res, next) => {
+  var id = req.body.id;
+  console.log(id);
+  
+  fs.readFile(path.join(__dirname, "products.json"), (err, data) => {
+    if (err) throw err;
+    df = JSON.parse(data);
+    console.log(df);
+    var indice = 0
+    df.forEach((element, index) => {
+      if(id == element.id) {
+        indice = index;  
+      }
+    })
+    df.splice(indice, 1)
+
+    console.log(indice)
+
+    res.send(df);
+  })
+
+  next();
+});
+
+server.patch("/patchProd", (req, res, next) => {
+  var id = req.query.id;
+  var name = req.query.name;
+  
+  fs.readFile(path.join(__dirname, "products.json"), (err, data) => {
+    if (err) throw err;
+    df = JSON.parse(data);
+    df.forEach(element => {
+      if (id == element.id) {
+        element.name = name;
+        res.send(element);  
+      }
+    })
+  });
+  
+  
+  
+});
+
 
 server.get("/home", (req, res, next) => {
   res.send("HOME PAGE");
