@@ -2,6 +2,15 @@ const restify = require("restify");
 const fs = require("fs");
 const path = require("path");
 
+const ProductController = require('./controller/ProductController')
+
+const mongoDB = require('mongoose')
+mongoDB.connect("mongodb+srv://tachibana:tachibana@gigio-yhbyz.mongodb.net/tachibana?retryWrites=true&w=majority", 
+    {useNewUrlParser: true, useUnifiedTopology: true}, () => {
+    console.log('Connected to Mongo');
+});
+
+
 const server = restify.createServer({
   name: "Tachibana",
 });
@@ -10,99 +19,29 @@ server.use(restify.plugins.bodyParser()); //must use in order to parse the BODY 
 server.use(restify.plugins.queryParser()); // the same, but with QUERY
 
 server.post("/products", async (req, res, next) => {
-  var product = {
-    id: req.body.id,
-    name: req.body.name,
-    descript: req.body.descript,
-    price: req.body.price,
-  };
-
-  let data = fs.readFileSync(path.join(__dirname, "products.json")).toString();
-
-  let prods = JSON.parse(data);
-
-  prods.push(product);
-
-  data = JSON.stringify(prods);
-
-  fs.writeFile(path.join(__dirname, "products.json"), data, (err) => {
-    if (err) throw err;
-  });
-
-  res.send("Added");
-
+  ProductController.store(req, res);
   next();
 });
 
 server.get("/products", (req, res, next) => {
-  fs.readFile(path.join(__dirname, "products.json"), (err, data) => {
-    if (err) {
-      throw err;
-    }
-    df = JSON.parse(data);
-    res.send(df);
-  });
+  ProductController.readAll(req, res);
   next();
 });
 
 
 server.post("/productsById", (req, res, next) => {
-  var id = req.body.id
-  console.log(id);
-  fs.readFile(path.join(__dirname, "products.json"), (err, data) => {
-    if (err) {
-      throw err;
-    }
-    df = JSON.parse(data);
-    console.log(df);
-    df.forEach(element => {
-      if(id == element.id) res.send(element);
-    });
-  });
+  ProductController.readOne(req, res);
   next();
 });
 
 server.post("/deleteProd", (req, res, next) => {
-  var id = req.body.id;
-  console.log(id);
-  
-  fs.readFile(path.join(__dirname, "products.json"), (err, data) => {
-    if (err) throw err;
-    df = JSON.parse(data);
-    console.log(df);
-    var indice = 0
-    df.forEach((element, index) => {
-      if(id == element.id) {
-        indice = index;  
-      }
-    })
-    df.splice(indice, 1)
-
-    console.log(indice)
-
-    res.send(df);
-  })
-
+  ProductController.deleteProd(req, res);
   next();
 });
 
 server.patch("/patchProd", (req, res, next) => {
-  var id = req.query.id;
-  var name = req.query.name;
-  
-  fs.readFile(path.join(__dirname, "products.json"), (err, data) => {
-    if (err) throw err;
-    df = JSON.parse(data);
-    df.forEach(element => {
-      if (id == element.id) {
-        element.name = name;
-        res.send(element);  
-      }
-    })
-  });
-  
-  
-  
+  ProductController.update(req, res);
+  next();  
 });
 
 

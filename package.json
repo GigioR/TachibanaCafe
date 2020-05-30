@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/GigioR/TachibanaCafe#readme",
   "dependencies": {
+    "mongoose": "^5.9.16",
     "nodemon": "^2.0.4",
     "restify": "^8.5.1"
   }
